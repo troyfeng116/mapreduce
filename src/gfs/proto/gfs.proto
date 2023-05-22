@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package gfs;
+
+option go_package = "cs426.yale.edu/final_proj/src/gfs/proto";
+
+message FileChunk {
+    bytes contents = 1;
+    string file_id = 2;
+    string chunk_id = 3;
+    uint64 chunk_size = 4;
+}
+
+message GetLocsRequest {
+    string req_node_id = 1;
+    string file_id = 2;
+    string chunk_id = 3;
+}
+
+message GetLocsResponse {
+    repeated string node_ids = 1;
+}
+
+message ReadRequest {
+    string req_node_id = 1;
+    string file_id = 2;
+    string chunk_id = 3;
+}
+
+message ReadResponse {
+    FileChunk file_chunk = 1;
+}
+
+message ReadFromNodeRequest {
+    string req_node_id = 1;
+    string node_id = 2;
+    string file_id = 3;
+    string chunk_id = 4;
+}
+
+message ReadFromNodeResponse {
+    FileChunk file_chunk = 1;
+}
+
+message WriteRequest {
+    string req_node_id = 1;
+    FileChunk file_chunk = 2;
+}
+
+message WriteResponse {}
+
+message WriteToNodeRequest {
+    string req_node_id = 1;
+    string node_id = 2;
+    FileChunk file_chunk = 3;
+}
+
+message WriteToNodeResponse {}
+
+message DeleteRequest {
+    string req_node_id = 1;
+    string file_id = 2;
+}
+
+message DeleteResponse {}
+
+service GFS {
+    rpc GetLocs(GetLocsRequest) returns (GetLocsResponse);
+
+    rpc Read(ReadRequest) returns (ReadResponse);
+    rpc ReadFromNode(ReadFromNodeRequest) returns (ReadFromNodeResponse);
+    rpc Write(WriteRequest) returns (WriteResponse);
+    rpc WriteToNode(WriteToNodeRequest) returns (WriteToNodeResponse);
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+}

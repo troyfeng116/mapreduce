@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package leader;
+
+option go_package = "cs426.yale.edu/final_proj/src/mr/leader/proto";
+
+message FileChunk {
+    bytes contents = 1;
+    string file_id = 2;
+    string chunk_id = 3;
+    uint64 chunk_size = 4;
+}
+
+message MedFile {
+    string file_id = 1;
+    string chunk_id = 2;
+}
+
+message NotifyMapTaskDoneRequest {
+    string req_node_id = 1;
+    string map_task_id = 2;
+    string reduce_task_id = 3;
+    string med_file_id = 4;
+    string med_chunk_id = 5;
+}
+
+message NotifyMapTaskDoneResponse {}
+
+message NotifyReduceTaskDoneRequest {
+    string req_node_id = 1;
+    string reduce_task_id = 2;
+    string out_file_id = 3;
+    string out_chunk_id = 4;
+}
+
+message NotifyReduceTaskDoneResponse {}
+
+service Leader {
+    rpc NotifyMapTaskDone(NotifyMapTaskDoneRequest) returns (NotifyMapTaskDoneResponse);
+    rpc NotifyReduceTaskDone(NotifyReduceTaskDoneRequest) returns (NotifyReduceTaskDoneResponse);
+}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package worker;
+
+option go_package = "cs426.yale.edu/final_proj/src/mr/worker/proto";
+
+message FileChunk {
+    bytes contents = 1;
+    string file_id = 2;
+    string chunk_id = 3;
+    uint64 chunk_size = 4;
+}
+
+message MedFile {
+    string file_id = 1;
+    string chunk_id = 2;
+}
+
+message AssignMapTaskRequest {
+    string map_task_id = 1;
+    string in_file_id = 2;
+    string in_chunk_id = 3;
+}
+
+message AssignMapTaskResponse {
+    bool success = 1;
+}
+
+message AssignReduceTaskRequest {
+    string reduce_task_id = 1;
+    repeated MedFile med_files_to_reduce = 2;
+}
+
+message AssignReduceTaskResponse {
+    bool success = 1;
+    string out_file_id = 2;
+    string out_chunk_id = 3;
+}
+
+message RequestMedFileRequest {
+    string file_id = 1;
+    string chunk_id = 2;
+}
+
+message RequestMedFileResponse {
+    FileChunk file_chunk = 1;
+}
+
+service Worker {
+    rpc AssignMapTask(AssignMapTaskRequest) returns (AssignMapTaskResponse);
+    rpc AssignReduceTask(AssignReduceTaskRequest) returns (AssignReduceTaskResponse);
+    rpc RequestMedFile(RequestMedFileRequest) returns (RequestMedFileResponse);
+}
